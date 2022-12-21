@@ -1,41 +1,33 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
+	"github.com/eliasacevedo/golang-microservice-template/src/config"
+	"github.com/eliasacevedo/golang-microservice-template/src/server"
 	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
-	"github.com/joho/godotenv"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	environment := os.Getenv("env")
-	if environment == "" {
-		environment = ".env.local"
-	}
-
+	// Base logger
 	l := utilities.NewLogger()
 
-	err := godotenv.Load(environment)
-	if err != nil {
-		l.PanicApp(fmt.Sprintf("error loading env file: %s", err.Error()))
-	}
+	// Loading environment variables from external file
+	config.LoadEnvFromFile(l)
 
-	port := os.Getenv("PORT")
-	address := os.Getenv("ADDRESS")
+	// Running server
+	gin.SetMode(config.GetAppMode())
+	srv := server.NewServer(server.GetServerConfigFromEnvVar())
+	go server.RunServer(srv, l)
 
-	l.Info(fmt.Sprintf("running in %s:%s", address, port))
-
+	// Detect when server will shutdown
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	signal.Notify(c, syscall.SIGTERM)
 
 	sig := <-c
-	l.Info(fmt.Sprintf("Got signal: %d", sig))
-
-	context.WithTimeout(context.Background(), 30*time.Second)
+	server.OnShutDownServer(srv, l, sig)
 }

@@ -10,11 +10,13 @@ const (
 )
 
 type Logger struct {
-	log.Logger
+	logger log.Logger
 }
 
 func NewLogger() Logger {
-	return Logger{}
+	return Logger{
+		logger: *log.Default(),
+	}
 }
 
 func (l Logger) Info(message string) {
@@ -34,9 +36,9 @@ func (l Logger) PanicApp(message string) {
 }
 
 func (l Logger) print(etype string, message string) {
-	l.Printf("[%s] %s", etype, message)
+	l.logger.Printf("[%s] %s", etype, message)
 }
 
 func (l Logger) printBreak(etype string, message string) {
-	l.Fatalf("[%s] %s", etype, message)
+	l.logger.Fatalf("[%s] %s", etype, message)
 }

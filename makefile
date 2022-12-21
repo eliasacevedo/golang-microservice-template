@@ -10,3 +10,6 @@ clean-bin:
 
 docker:
 	docker build -t $(APPNAME) --build-arg ENV=$(ENV) --build-arg PORT=$(PORT) --build-arg APPNAME="$(APPNAME)" .
+
+run:
+	ENV=".env.local" go run main.go
