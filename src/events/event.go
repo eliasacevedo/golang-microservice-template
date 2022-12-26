@@ -14,7 +14,10 @@ const (
 	SERVER_ERROR     EventType = "Server Error"
 )
 
-type IEvent interface{}
+type IEvent interface {
+	Info(message string)
+	Error(message string)
+}
 
 type Event struct {
 	etype EventType

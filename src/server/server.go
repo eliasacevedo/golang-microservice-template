@@ -9,6 +9,7 @@ import (
 
 	config "github.com/eliasacevedo/golang-microservice-template/src/config"
 	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	"github.com/gin-gonic/gin"
 )
 
 type ServerConfig struct {
@@ -20,15 +21,16 @@ type ServerConfig struct {
 	TimeBeforeShutdownServer time.Duration
 }
 
-func NewServer(config ServerConfig) *http.Server {
+func NewServer(c ServerConfig, l *utilities.Logger, h http.Handler) *http.Server {
+	gin.SetMode(config.GetAppMode())
 	srv := &http.Server{
-		Addr:              config.Port,
-		Handler:           NewRouter(),
-		ReadTimeout:       config.ReadTimeout,
-		ReadHeaderTimeout: config.ReadHeaderTimeout,
-		WriteTimeout:      config.WriteTimeout,
+		Addr:              c.Port,
+		Handler:           h,
+		ReadTimeout:       c.ReadTimeout,
+		ReadHeaderTimeout: c.ReadHeaderTimeout,
+		WriteTimeout:      c.WriteTimeout,
 		// BaseContext:       modifyContext,
-		IdleTimeout: config.IdleTimeout,
+		IdleTimeout: c.IdleTimeout,
 	}
 
 	return srv
