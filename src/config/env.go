@@ -10,8 +10,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var appName = ""
+
 func GetAppName() string {
-	return GetEnvVar("", true)
+	if appName == "" {
+		appName = GetEnvVar("", true)
+	}
+
+	return appName
 }
 
 func GetPort() string {
@@ -46,6 +52,18 @@ func GetTimeBeforeShutdownServer() time.Duration {
 	return GetTimeFromEnv("_TIME_BEFORE_SHUTDOWN_SERVER", false, 60)
 }
 
+func GetMustLogInfo() bool {
+	return GetBooleanFromEnv("_LOG_INFO", false, true)
+}
+
+func GetMustLogServerError() bool {
+	return GetBooleanFromEnv("_LOG_SERVER_ERRORS", false, true)
+}
+
+func GetMustLogValidationError() bool {
+	return GetBooleanFromEnv("_LOG_VALIDATION_ERROR", false, true)
+}
+
 func GetTimeFromEnv(key string, required bool, initial time.Duration) time.Duration {
 	value := GetEnvVar(key, required)
 	if value == "" && !required {
@@ -57,6 +75,18 @@ func GetTimeFromEnv(key string, required bool, initial time.Duration) time.Durat
 		panic(key + " param is not a valid number")
 	}
 	return time.Duration(num)
+}
+
+func GetBooleanFromEnv(key string, required bool, initial bool) bool {
+	value := GetEnvVar(key, required)
+	if value == "" && !required {
+		return initial
+	}
+	result, err := strconv.ParseBool(value)
+	if err != nil {
+		panic(key + " param is not a valid number")
+	}
+	return result
 }
 
 func GetEnvVar(key string, required bool) string {

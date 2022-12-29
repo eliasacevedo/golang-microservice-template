@@ -7,6 +7,7 @@ import (
 
 	"github.com/eliasacevedo/golang-microservice-template/src/config"
 	"github.com/eliasacevedo/golang-microservice-template/src/core"
+	"github.com/eliasacevedo/golang-microservice-template/src/middlewares"
 	"github.com/eliasacevedo/golang-microservice-template/src/server"
 	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
 	e "github.com/eliasacevedo/golang-microservice-template/src/x/module"
@@ -21,6 +22,8 @@ func main() {
 
 	modules := CreateAllModules()
 	handler := server.NewRouter(&l)
+	handler.Use(middlewares.DataReturnMiddleware(&l))
+	handler.Use(middlewares.EventsMiddleware(l, config.GetMustLogInfo(), config.GetMustLogValidationError(), config.GetMustLogServerError()))
 	for _, module := range modules {
 		module.SetRoutes(handler, &l)
 		// add middlewares
