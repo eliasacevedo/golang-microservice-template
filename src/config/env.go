@@ -64,6 +64,18 @@ func GetMustLogValidationError() bool {
 	return GetBooleanFromEnv("_LOG_VALIDATION_ERROR", false, true)
 }
 
+func GetMustLogHTTPBeginRequestInfo() bool {
+	return GetBooleanFromEnv("_LOG_HTTP_BEGIN_REQUEST", false, true)
+}
+
+func GetMustLogHTTPError() bool {
+	return GetBooleanFromEnv("_LOG_HTTP_ERROR", false, true)
+}
+
+func GetMustLogHTTPEndRequestInfo() bool {
+	return GetBooleanFromEnv("_LOG_HTTP_END_REQUEST", false, true)
+}
+
 func GetTimeFromEnv(key string, required bool, initial time.Duration) time.Duration {
 	value := GetEnvVar(key, required)
 	if value == "" && !required {
@@ -96,10 +108,10 @@ func GetEnvVar(key string, required bool) string {
 	} else {
 		prefix = GetAppName()
 	}
-
-	value, isThere := os.LookupEnv(prefix + key)
+	index := prefix + key
+	value, isThere := os.LookupEnv(index)
 	if !isThere && required {
-		panic(fmt.Sprintf("%s env var is not defined ", key))
+		panic(fmt.Sprintf("%s env var is not defined", index))
 	}
 	return value
 }

@@ -15,7 +15,7 @@ import (
 
 func main() {
 	// Base logger
-	l := utilities.NewLogger()
+	var l = utilities.NewLogger()
 
 	// Loading environment variables from external file
 	config.LoadEnvFromFile(l)
