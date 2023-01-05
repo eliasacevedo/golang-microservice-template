@@ -14,8 +14,8 @@ import (
 
 var c = resty.New() // Remember add env config timeout and other importants default config
 
-func NewBaseRequest(method string, url string, body interface{}, client *resty.Client, logger utilities.Logger) ([]byte, *resty.Response, error) {
-	event := events.NewEvent(events.HTTP, logger)
+func NewBaseRequest(method string, url string, body interface{}, client *resty.Client, logger *utilities.Logger) ([]byte, *resty.Response, error) {
+	event := events.NewEvent(events.HTTP, *logger)
 
 	if client == nil {
 		client = c
@@ -44,7 +44,7 @@ func NewBaseRequest(method string, url string, body interface{}, client *resty.C
 	return response.Body(), response, err
 }
 
-func NewRequest(method string, url string, body interface{}, result interface{}, logger utilities.Logger) error {
+func NewRequest(method string, url string, body interface{}, result interface{}, logger *utilities.Logger) error {
 	value, response, err := NewBaseRequest(method, url, body, nil, logger)
 	if err != nil {
 		return err

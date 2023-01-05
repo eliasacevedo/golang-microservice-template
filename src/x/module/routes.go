@@ -13,7 +13,7 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 	// l.Error("must define routes in DEFAULT module")
 	c.GET("osmo", func(ctx *gin.Context) {
 		var data interface{}
-		err := services.NewRequest(http.MethodGet, "https://rpc.osmosis.interbloc.org/net_info", nil, &data, *l)
+		err := services.NewRequest(http.MethodGet, "https://rpc.osmosis.interbloc.org/net_info", nil, &data, l)
 		if err != nil {
 			ctx.Set(middlewares.ERROR_CODE_KEY_CONTEXT, uint(500))
 			ctx.JSON(http.StatusBadRequest, err)

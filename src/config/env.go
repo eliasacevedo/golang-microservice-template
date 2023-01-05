@@ -76,6 +76,10 @@ func GetMustLogHTTPEndRequestInfo() bool {
 	return GetBooleanFromEnv("_LOG_HTTP_END_REQUEST", false, true)
 }
 
+func GetDatabase() string {
+	return GetEnvVar("_CONNECTION_STRING", true)
+}
+
 func GetTimeFromEnv(key string, required bool, initial time.Duration) time.Duration {
 	value := GetEnvVar(key, required)
 	if value == "" && !required {
