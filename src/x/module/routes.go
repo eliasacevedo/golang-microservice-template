@@ -11,16 +11,21 @@ import (
 
 func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 	// l.Error("must define routes in DEFAULT module")
-	c.GET("osmo", func(ctx *gin.Context) {
-		var data interface{}
-		err := services.NewRequest(http.MethodGet, "https://rpc.osmosis.interbloc.org/net_info", nil, &data, l)
-		if err != nil {
-			ctx.Set(middlewares.ERROR_CODE_KEY_CONTEXT, uint(500))
+	middlewares.AddController(c, http.MethodGet, "osmo",
+		func(ctx *gin.Context) uint {
+			var data interface{}
+			err := services.NewRequest(http.MethodGet, "https://rpc.osmosis.interbloc.org/net_info", nil, &data, l)
+			if err != nil {
+				return uint(500)
+			}
+
+			ctx.JSON(http.StatusOK, data)
+
+			return 0
+		},
+
+		func(ctx *gin.Context, ecode uint, err error) {
 			ctx.JSON(http.StatusBadRequest, err)
-
-			return
-		}
-
-		ctx.JSON(http.StatusOK, data)
-	})
+		},
+	)
 }

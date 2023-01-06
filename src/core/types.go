@@ -7,6 +7,6 @@ type Module interface {
 }
 
 type BaseResponse struct {
-	Data      interface{}
-	ErrorCode uint
+	Data      interface{} `json:"data"`
+	ErrorCode uint        `json:"error_code"`
 }
