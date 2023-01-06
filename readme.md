@@ -8,7 +8,7 @@ Base template for microservices used like APIs
 - [x] Dockerized
 - [x] Secure Shutdown or interruptions
 - [] Dependency Injection
-- [] External Requests service (HTTP)
-- [] Middlewares (JSON, Request validation)
-- [] Events logic
-- [] Database service
+- [x] External Requests service (HTTP)
+- [x] Middlewares (JSON, Request validation)
+- [x] Events logic
+- [x] Database service
