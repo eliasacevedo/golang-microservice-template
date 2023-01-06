@@ -23,9 +23,5 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 
 			return 0
 		},
-
-		func(ctx *gin.Context, ecode uint, err error) {
-			ctx.JSON(http.StatusBadRequest, err)
-		},
 	)
 }
