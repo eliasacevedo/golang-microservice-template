@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/joho/godotenv"
 )
 

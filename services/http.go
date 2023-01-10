@@ -7,15 +7,15 @@ import (
 
 	"github.com/go-resty/resty/v2"
 
-	config "github.com/eliasacevedo/golang-microservice-template/src/config"
-	events "github.com/eliasacevedo/golang-microservice-template/src/events"
-	utilities "github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	config "github.com/eliasacevedo/golang-microservice-template/config"
+	events "github.com/eliasacevedo/golang-microservice-template/events"
+	utilities "github.com/eliasacevedo/golang-microservice-template/utilities"
 )
 
 var c = resty.New() // Remember add env config timeout and other importants default config
 
 func NewBaseRequest(method string, url string, body interface{}, client *resty.Client, logger *utilities.Logger) ([]byte, *resty.Response, error) {
-	event := events.NewEvent(events.HTTP, *logger)
+	event := events.NewEvent(events.HTTP, logger)
 
 	if client == nil {
 		client = c

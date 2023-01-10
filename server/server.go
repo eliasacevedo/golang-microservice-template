@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	config "github.com/eliasacevedo/golang-microservice-template/src/config"
-	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	config "github.com/eliasacevedo/golang-microservice-template/config"
+	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/gin-gonic/gin"
 )
 
@@ -72,8 +72,3 @@ func OnShutDownServer(srv *http.Server, l utilities.Logger, sig os.Signal) {
 	l.Info("All pending transactions completed")
 	l.Info("Server exiting")
 }
-
-// func modifyContext(net.Listener) context.Context {
-// 	ctx := context.WithValue(context.Background(), )
-// 	return ctx
-// }

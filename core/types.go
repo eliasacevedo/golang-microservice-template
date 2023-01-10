@@ -1,6 +1,6 @@
 package core
 
-import "github.com/eliasacevedo/golang-microservice-template/src/server"
+import "github.com/eliasacevedo/golang-microservice-template/server"
 
 type Module interface {
 	server.Route

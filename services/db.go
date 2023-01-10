@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/eliasacevedo/golang-microservice-template/src/config"
+	"github.com/eliasacevedo/golang-microservice-template/config"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )

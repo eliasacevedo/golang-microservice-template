@@ -6,8 +6,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/eliasacevedo/golang-microservice-template/src/core"
-	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	"github.com/eliasacevedo/golang-microservice-template/core"
+	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,7 +1,7 @@
 package events
 
 import (
-	utilities "github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	utilities "github.com/eliasacevedo/golang-microservice-template/utilities"
 )
 
 type EventType string
@@ -21,10 +21,10 @@ type IEvent interface {
 
 type Event struct {
 	etype EventType
-	log   utilities.Logger
+	log   *utilities.Logger
 }
 
-func NewEvent(t EventType, l utilities.Logger) Event {
+func NewEvent(t EventType, l *utilities.Logger) Event {
 	return Event{
 		etype: t,
 		log:   l,

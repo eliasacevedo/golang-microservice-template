@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/gin-gonic/gin"
 )
 

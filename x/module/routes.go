@@ -3,9 +3,9 @@ package module
 import (
 	"net/http"
 
-	"github.com/eliasacevedo/golang-microservice-template/src/middlewares"
-	"github.com/eliasacevedo/golang-microservice-template/src/services"
-	"github.com/eliasacevedo/golang-microservice-template/src/utilities"
+	"github.com/eliasacevedo/golang-microservice-template/middlewares"
+	"github.com/eliasacevedo/golang-microservice-template/services"
+	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/gin-gonic/gin"
 )
 

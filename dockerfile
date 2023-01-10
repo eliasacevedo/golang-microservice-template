@@ -7,8 +7,7 @@ COPY go.mod ./
 COPY go.sum ./
 
 RUN go mod download
-
-COPY ./* ./ 
+COPY . .
 RUN make build
 
 FROM alpine:3.14 as runner
@@ -18,6 +17,7 @@ ARG APPNAME
 ENV APPNAME=$APPNAME
 
 COPY --from=build /app/bin .
+RUN chmod +x $APPNAME
 EXPOSE $PORT
 
 CMD ./$APPNAME
