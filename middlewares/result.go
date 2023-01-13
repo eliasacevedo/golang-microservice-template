@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/eliasacevedo/golang-microservice-template/core"
@@ -61,7 +62,7 @@ func writeJson(c *gin.Context, l *utilities.Logger, bw *BodyWriter) {
 	var data interface{}
 	err := json.Unmarshal(bw.body.Bytes(), &data)
 	if err != nil {
-		l.PanicApp("couldn't convert result to json")
+		l.PanicApp(fmt.Errorf("couldn't convert result to json: %w", err).Error())
 	}
 	response := core.BaseResponse{
 		Data:      data,
