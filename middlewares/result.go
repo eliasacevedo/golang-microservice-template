@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/eliasacevedo/golang-microservice-template/core"
@@ -25,6 +26,10 @@ func DataReturnMiddleware(l *utilities.Logger) gin.HandlerFunc {
 		errorCode, err := getErrorCode(c)
 		if err != nil {
 			l.PanicApp("error code is not a number")
+		}
+
+		if bw.ResponseWriter.Status() == 404 {
+			c.JSON(http.StatusNotFound, nil)
 		}
 
 		if len(c.Errors) > 0 || errorCode > 0 {
