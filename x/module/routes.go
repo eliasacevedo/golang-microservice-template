@@ -20,7 +20,7 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 		Required: true,
 	}
 
-	middlewares.AddController(c, http.MethodGet, "osmo", &middlewares.ControllerConfig[any, any, any]{
+	middlewares.AddController(c, 1, http.MethodGet, "osmo", &middlewares.ControllerConfig[any, any, any]{
 		Query: nil, Body: nil, Uri: nil,
 		Execute: func(ctx *gin.Context, query *any, body *any, uri *any) uint {
 			var data interface{}
@@ -36,7 +36,7 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 	})
 
 	middlewares.AddController(
-		c, http.MethodGet, "akt",
+		c, 1, http.MethodGet, "akt",
 		&middlewares.ControllerConfig[qqq, any, any]{
 			Query: q, Body: nil, Uri: nil,
 			Execute: func(ctx *gin.Context, query *qqq, body *any, uri *any) uint {

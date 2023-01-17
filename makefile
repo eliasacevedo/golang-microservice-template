@@ -13,3 +13,6 @@ docker:
 
 run:
 	ENV=".env.local" go run ./cmd/server
+
+swagger:
+	swag init -dir ./cmd/server

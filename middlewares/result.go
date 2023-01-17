@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/eliasacevedo/golang-microservice-template/core"
+	"github.com/eliasacevedo/golang-microservice-template/server"
 	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +36,7 @@ func DataReturnMiddleware(l *utilities.Logger) gin.HandlerFunc {
 			return
 		}
 
-		if strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json") {
+		if strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json") && c.FullPath() != server.SwaggerRoute {
 			writeJson(c, l, bw)
 			return
 		}

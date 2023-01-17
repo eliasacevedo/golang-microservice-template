@@ -2,9 +2,11 @@ package middlewares
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"reflect"
 
+	env "github.com/eliasacevedo/golang-microservice-template/config"
 	"github.com/eliasacevedo/golang-microservice-template/core"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -30,11 +32,18 @@ type ControllerConfig[Query any, Body any, Uri any] struct {
 
 func AddController[Query any, Body any, Uri any](
 	engine *gin.Engine,
+	version int,
 	method string,
 	path string,
 	config *ControllerConfig[Query, Body, Uri],
 ) {
-	engine.Handle(method, path, func(ctx *gin.Context) {
+	if version == 0 {
+		version = 1
+	}
+
+	prefix := env.GetRoutesPrefix()
+	p := fmt.Sprintf("%s/v%d/%s", prefix, version, path)
+	engine.Handle(method, p, func(ctx *gin.Context) {
 		if engine == nil {
 			panic("must specify engine parameter")
 		}

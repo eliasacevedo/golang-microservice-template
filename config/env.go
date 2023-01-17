@@ -48,6 +48,19 @@ func GetAppMode() string {
 	return GetEnvVar("_MODE", true)
 }
 
+func GetDescription() string {
+	return GetEnvVar("_DESCRIPTION", false)
+}
+
+func GetVersion() int64 {
+	number, _ := GetNumberFromEnv("_VERSION", false, 1)
+	return number
+}
+
+func GetRoutesPrefix() string {
+	return GetStringFromEnv("ROUTES_PREFIX", true, "api")
+}
+
 func GetTimeBeforeShutdownServer() time.Duration {
 	return GetTimeFromEnv("_TIME_BEFORE_SHUTDOWN_SERVER", false, 60)
 }
@@ -80,17 +93,41 @@ func GetDatabase() string {
 	return GetEnvVar("_CONNECTION_STRING", true)
 }
 
+func GetStringFromEnv(key string, required bool, initial string) string {
+	prefix := ""
+	if key == "" {
+		prefix = "APPNAME"
+	} else {
+		prefix = GetAppName()
+	}
+	index := prefix + key
+	value, isThere := os.LookupEnv(index)
+	if !isThere && required {
+		return initial
+	}
+	return value
+}
+
 func GetTimeFromEnv(key string, required bool, initial time.Duration) time.Duration {
+	number, found := GetNumberFromEnv(key, false, 0)
+	if !found {
+		return initial
+	}
+	return time.Duration(number)
+}
+
+func GetNumberFromEnv(key string, required bool, initial int64) (int64, bool) {
 	value := GetEnvVar(key, required)
 	if value == "" && !required {
-		return initial
+		return initial, false
 	}
 
 	num, err := strconv.ParseInt(value, 10, 64)
 	if err != nil {
 		panic(key + " param is not a valid number")
 	}
-	return time.Duration(num)
+
+	return num, true
 }
 
 func GetBooleanFromEnv(key string, required bool, initial bool) bool {

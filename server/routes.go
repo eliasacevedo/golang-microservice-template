@@ -13,3 +13,5 @@ func NewRouter(l *utilities.Logger) *gin.Engine {
 type Route interface {
 	SetRoutes(c *gin.Engine, l *utilities.Logger)
 }
+
+const SwaggerRoute = "/swagger/*any"
