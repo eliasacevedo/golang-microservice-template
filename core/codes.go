@@ -1,8 +1,11 @@
 package core
 
 const (
-	ErrInvalidUri          = uint(1)
-	ErrInvalidBody         = uint(2)
-	ErrInvalidQuery        = uint(3)
-	ErrBindingNotSpecified = uint(4)
+	NoError                ErrorCode = 0
+	ErrInvalidUri          ErrorCode = 1
+	ErrInvalidBody         ErrorCode = 2
+	ErrInvalidQuery        ErrorCode = 3
+	ErrBindingNotSpecified ErrorCode = 4
+	ErrAPIExternalRequest  ErrorCode = 5
+	ErrCodeIsNotErrorCode  ErrorCode = 5
 )

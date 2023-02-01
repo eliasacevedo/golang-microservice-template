@@ -3,6 +3,7 @@ package middlewares
 import (
 	"fmt"
 
+	"github.com/eliasacevedo/golang-microservice-template/core"
 	"github.com/eliasacevedo/golang-microservice-template/events"
 	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	"github.com/gin-gonic/gin"
@@ -13,9 +14,9 @@ func EventsMiddleware(l *utilities.Logger, logInfo bool, logValidationError bool
 		c.Next()
 		ec, ok := c.Get(ERROR_CODE_KEY_CONTEXT)
 		if !ok {
-			ec = uint(0)
+			ec = core.NoError
 		}
-		ecc := ec.(uint)
+		ecc := ec.(core.ErrorCode)
 		var e events.IEvent
 		st := c.Writer.Status()
 		ip := c.ClientIP()
@@ -31,7 +32,7 @@ func EventsMiddleware(l *utilities.Logger, logInfo bool, logValidationError bool
 	}
 }
 
-func printError(ip string, status int, errorCode uint, url string, etype events.EventType, l *utilities.Logger) {
+func printError(ip string, status int, errorCode core.ErrorCode, url string, etype events.EventType, l *utilities.Logger) {
 	e := events.NewEvent(etype, l)
 	s := fmt.Sprintf("IP %s | Status %d | Path %s | Error Code %d | Event %s |", ip, status, url, errorCode, etype)
 	e.Error(s)

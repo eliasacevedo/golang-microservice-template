@@ -9,7 +9,6 @@ import (
 
 	config "github.com/eliasacevedo/golang-microservice-template/config"
 	"github.com/eliasacevedo/golang-microservice-template/utilities"
-	"github.com/gin-gonic/gin"
 )
 
 type ServerConfig struct {
@@ -22,7 +21,6 @@ type ServerConfig struct {
 }
 
 func NewServer(c ServerConfig, l *utilities.Logger, h http.Handler) *http.Server {
-	gin.SetMode(config.GetAppMode())
 	srv := &http.Server{
 		Addr:              c.Port,
 		Handler:           h,

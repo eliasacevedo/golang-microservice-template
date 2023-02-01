@@ -13,6 +13,7 @@ import (
 	"github.com/eliasacevedo/golang-microservice-template/server"
 	"github.com/eliasacevedo/golang-microservice-template/utilities"
 	e "github.com/eliasacevedo/golang-microservice-template/x"
+	"github.com/gin-gonic/gin"
 	files "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -26,8 +27,10 @@ func main() {
 	// Loading environment variables from external file
 	config.LoadEnvFromFile(l)
 
+	gin.SetMode(config.GetAppMode())
 	modules := e.GetModules()
 	handler := server.NewRouter(&l)
+
 	handler.Use(middlewares.DataReturnMiddleware(&l))
 	handler.Use(middlewares.EventsMiddleware(&l, config.GetMustLogInfo(), config.GetMustLogValidationError(), config.GetMustLogServerError()))
 	for _, module := range modules {

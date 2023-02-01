@@ -28,11 +28,13 @@ func DataReturnMiddleware(l *utilities.Logger) gin.HandlerFunc {
 			l.PanicApp("error code is not a number")
 		}
 
-		if bw.ResponseWriter.Status() == 404 {
-			c.JSON(http.StatusNotFound, nil)
+		foundController := bw.ResponseWriter.Status() != 404
+
+		if !foundController {
+			c.AbortWithStatus(http.StatusNotFound)
 		}
 
-		if len(c.Errors) > 0 || errorCode > 0 {
+		if len(c.Errors) > 0 || errorCode != core.NoError {
 			writeErrors(c, l, bw, errorCode)
 			return
 		}
@@ -41,7 +43,7 @@ func DataReturnMiddleware(l *utilities.Logger) gin.HandlerFunc {
 			return
 		}
 
-		if strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json") && c.FullPath() != server.SwaggerRoute {
+		if foundController && strings.Contains(c.Writer.Header().Get("Content-Type"), "application/json") && c.FullPath() != server.SwaggerRoute {
 			writeJson(c, l, bw)
 			return
 		}
@@ -50,7 +52,7 @@ func DataReturnMiddleware(l *utilities.Logger) gin.HandlerFunc {
 	}
 }
 
-func writeErrors(c *gin.Context, l *utilities.Logger, bw *BodyWriter, errorCode uint) {
+func writeErrors(c *gin.Context, l *utilities.Logger, bw *BodyWriter, errorCode core.ErrorCode) {
 	response := core.BaseResponse{
 		Data:      nil,
 		ErrorCode: errorCode,
@@ -72,7 +74,7 @@ func writeJson(c *gin.Context, l *utilities.Logger, bw *BodyWriter) {
 	}
 	response := core.BaseResponse{
 		Data:      data,
-		ErrorCode: uint(0),
+		ErrorCode: core.NoError,
 	}
 
 	jsonResponse, err := json.Marshal(response)
@@ -84,15 +86,15 @@ func writeJson(c *gin.Context, l *utilities.Logger, bw *BodyWriter) {
 	bw.body.Reset()
 }
 
-func getErrorCode(c *gin.Context) (uint, error) {
+func getErrorCode(c *gin.Context) (core.ErrorCode, error) {
 	v, ok := c.Get(ERROR_CODE_KEY_CONTEXT)
 	if !ok {
-		return uint(0), nil
+		return core.NoError, nil
 	}
 
-	ec, ok := v.(uint)
+	ec, ok := v.(core.ErrorCode)
 	if !ok {
-		return uint(0), errors.New("error code context value is not a uint")
+		return core.ErrCodeIsNotErrorCode, errors.New("error code context value is not a uint")
 	}
 	return ec, nil
 }

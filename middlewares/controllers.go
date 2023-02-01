@@ -21,7 +21,7 @@ type BodyParameter[T any] struct {
 	Binding binding.BindingBody
 }
 
-type ControllerExecuteFunc[Query any, Body any, Uri any] func(*gin.Context, *Query, *Body, *Uri) uint
+type ControllerExecuteFunc[Query any, Body any, Uri any] func(*gin.Context, *Query, *Body, *Uri) core.ErrorCode
 
 type ControllerConfig[Query any, Body any, Uri any] struct {
 	Query   *Parameter[Query]
@@ -88,7 +88,7 @@ func AddController[Query any, Body any, Uri any](
 
 		errorCode := config.Execute(ctx, &queryValue, &bValue, &uriValue)
 
-		if errorCode == 0 {
+		if errorCode == core.NoError {
 			return
 		}
 
@@ -96,9 +96,9 @@ func AddController[Query any, Body any, Uri any](
 	})
 }
 
-func GetBody[T any](ctx *gin.Context, b binding.BindingBody, p *T) (uint, error) {
+func GetBody[T any](ctx *gin.Context, b binding.BindingBody, p *T) (core.ErrorCode, error) {
 	if p == nil || ctx == nil {
-		return uint(0), nil
+		return core.NoError, nil
 	}
 
 	if b == nil {
@@ -111,12 +111,12 @@ func GetBody[T any](ctx *gin.Context, b binding.BindingBody, p *T) (uint, error)
 		ctx.JSON(http.StatusBadRequest, nil)
 		return core.ErrInvalidBody, err
 	}
-	return uint(0), nil
+	return core.NoError, nil
 }
 
-func GetQuery[T any](ctx *gin.Context, p *T) (uint, error) {
+func GetQuery[T any](ctx *gin.Context, p *T) (core.ErrorCode, error) {
 	if p == nil || ctx == nil {
-		return uint(0), nil
+		return core.NoError, nil
 	}
 
 	err := ctx.ShouldBindQuery(p)
@@ -124,12 +124,12 @@ func GetQuery[T any](ctx *gin.Context, p *T) (uint, error) {
 		ctx.JSON(http.StatusBadRequest, nil)
 		return core.ErrInvalidQuery, err
 	}
-	return uint(0), nil
+	return core.NoError, nil
 }
 
-func GetUri[T any](ctx *gin.Context, p *T) (uint, error) {
+func GetUri[T any](ctx *gin.Context, p *T) (core.ErrorCode, error) {
 	if p == nil || ctx == nil {
-		return uint(0), nil
+		return core.NoError, nil
 	}
 
 	err := ctx.ShouldBindUri(p)
@@ -138,5 +138,5 @@ func GetUri[T any](ctx *gin.Context, p *T) (uint, error) {
 		ctx.JSON(http.StatusBadRequest, nil)
 		return core.ErrInvalidUri, err
 	}
-	return uint(0), nil
+	return core.NoError, nil
 }

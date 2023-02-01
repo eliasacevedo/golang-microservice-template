@@ -3,6 +3,7 @@ package module
 import (
 	"net/http"
 
+	"github.com/eliasacevedo/golang-microservice-template/core"
 	"github.com/eliasacevedo/golang-microservice-template/middlewares"
 	"github.com/eliasacevedo/golang-microservice-template/services"
 	"github.com/eliasacevedo/golang-microservice-template/utilities"
@@ -22,16 +23,16 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 
 	middlewares.AddController(c, 1, http.MethodGet, "osmo", &middlewares.ControllerConfig[any, any, any]{
 		Query: nil, Body: nil, Uri: nil,
-		Execute: func(ctx *gin.Context, query *any, body *any, uri *any) uint {
+		Execute: func(ctx *gin.Context, query *any, body *any, uri *any) core.ErrorCode {
 			var data interface{}
 			err := services.NewRequest(http.MethodGet, "https://rpc.osmosis.interbloc.org/net_info", nil, &data, l)
 			if err != nil {
-				return uint(500)
+				return core.ErrAPIExternalRequest
 			}
 
 			ctx.JSON(http.StatusOK, data)
 
-			return 0
+			return core.NoError
 		},
 	})
 
@@ -39,9 +40,9 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 		c, 1, http.MethodGet, "akt",
 		&middlewares.ControllerConfig[qqq, any, any]{
 			Query: q, Body: nil, Uri: nil,
-			Execute: func(ctx *gin.Context, query *qqq, body *any, uri *any) uint {
+			Execute: func(ctx *gin.Context, query *qqq, body *any, uri *any) core.ErrorCode {
 				ctx.JSON(http.StatusOK, query)
-				return 0
+				return core.NoError
 			},
 		},
 	)
