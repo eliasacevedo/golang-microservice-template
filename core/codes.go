@@ -7,5 +7,5 @@ const (
 	ErrInvalidQuery        ErrorCode = 3
 	ErrBindingNotSpecified ErrorCode = 4
 	ErrAPIExternalRequest  ErrorCode = 5
-	ErrCodeIsNotErrorCode  ErrorCode = 5
+	ErrCodeIsNotErrorCode  ErrorCode = 6
 )

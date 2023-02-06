@@ -21,7 +21,7 @@ type BodyParameter[T any] struct {
 	Binding binding.BindingBody
 }
 
-type ControllerExecuteFunc[Query any, Body any, Uri any] func(*gin.Context, *Query, *Body, *Uri) core.ErrorCode
+type ControllerExecuteFunc[Query any, Body any, Uri any] func(*gin.Context, *Query, *Body, *Uri, *core.PaginationParams) core.ErrorCode
 
 type ControllerConfig[Query any, Body any, Uri any] struct {
 	Query   *Parameter[Query]
@@ -86,13 +86,16 @@ func AddController[Query any, Body any, Uri any](
 			}
 		}
 
-		errorCode := config.Execute(ctx, &queryValue, &bValue, &uriValue)
-
-		if errorCode == core.NoError {
-			return
+		var pagination core.PaginationParams
+		_, err := GetQuery(ctx, &pagination)
+		if err != nil {
+			pagination = core.NewPaginationParam(1, 10)
 		}
 
-		ctx.Set(ERROR_CODE_KEY_CONTEXT, errorCode)
+		errorCode := config.Execute(ctx, &queryValue, &bValue, &uriValue, &pagination)
+		if errorCode != core.NoError {
+			ctx.Set(ERROR_CODE_KEY_CONTEXT, errorCode)
+		}
 	})
 }
 

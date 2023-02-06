@@ -23,7 +23,7 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 
 	middlewares.AddController(c, 1, http.MethodGet, "osmo", &middlewares.ControllerConfig[any, any, any]{
 		Query: nil, Body: nil, Uri: nil,
-		Execute: func(ctx *gin.Context, query *any, body *any, uri *any) core.ErrorCode {
+		Execute: func(ctx *gin.Context, query *any, body *any, uri *any, _ *core.PaginationParams) core.ErrorCode {
 			var data interface{}
 			err := services.NewRequest(http.MethodGet, "https://rpc.osmosis.interbloc.org/net_info", nil, &data, l)
 			if err != nil {
@@ -40,7 +40,7 @@ func SetRoutes(c *gin.Engine, l *utilities.Logger) {
 		c, 1, http.MethodGet, "akt",
 		&middlewares.ControllerConfig[qqq, any, any]{
 			Query: q, Body: nil, Uri: nil,
-			Execute: func(ctx *gin.Context, query *qqq, body *any, uri *any) core.ErrorCode {
+			Execute: func(ctx *gin.Context, query *qqq, body *any, uri *any, _ *core.PaginationParams) core.ErrorCode {
 				ctx.JSON(http.StatusOK, query)
 				return core.NoError
 			},

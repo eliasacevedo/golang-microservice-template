@@ -93,6 +93,11 @@ func GetDatabase() string {
 	return GetEnvVar("_CONNECTION_STRING", true)
 }
 
+func GetDefaultPaginationQuantityItems() int64 {
+	v, _ := GetNumberFromEnv("_DEFAULT_PAGINATION_QUANTITY_ITEMS", false, 10)
+	return v
+}
+
 func GetStringFromEnv(key string, required bool, initial string) string {
 	prefix := ""
 	if key == "" {
